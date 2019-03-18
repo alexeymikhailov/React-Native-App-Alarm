@@ -15,7 +15,7 @@ const persistedReducer=persistReducer(persistConfig, alarmReducer);
 
 export default () => {
   let store=createStore(persistedReducer);
-  let persistor=persistStore(store)
+  let persistor=persistStore(store);
 
   return {
     store,

@@ -11,11 +11,18 @@ class AlarmTextInput extends Component {
   constructor(props) {
     super(props);
 
-    this.alarmTextInputRef=React.createRef();
+    this.alarmTextInputRef;
 
     this.state={
-      alarmTextValue: this.props.textValue,
-      measureAlarmTextInput: {}
+      alarmTextValue: this.props.textValue
+    };
+
+    this.onHandleSetAlarmTextInputRef=(ref) => {
+      this.alarmTextInputRef=ref;
+
+      if (this.props.setAlarmTextInputRef) {
+        this.props.onHandleSetAlarmTextInputRef(ref);
+      }
     };
 
     this.onChangeAlarmTextInput=(alarmTextValue) => {
@@ -29,13 +36,8 @@ class AlarmTextInput extends Component {
     };
 
     this.onFocusAlarmTextInput=() => {
-      if (this.props.onHandleSetCoordAlarmTextInput) {
-        this.alarmTextInputRef.current.measure((x, y, width, height, pageX, pageY) => {
-          this.props.onHandleSetCoordAlarmTextInput({
-            height,
-            pageY
-          });
-        });
+      if (this.props.onHandleSetAlarmTextInputRef) {
+        this.props.onHandleSetAlarmTextInputRef(this.alarmTextInputRef);
       }
     };
   }
@@ -56,13 +58,13 @@ class AlarmTextInput extends Component {
 
   render() {
     const {
-      style,
-      editableText=true
+      editableText=true,
+      style
     }=this.props;
 
     return (
       <TextInput
-        ref={this.alarmTextInputRef}
+        ref={this.onHandleSetAlarmTextInputRef}
         autoCapitalize="none"
         clearButtonMode="while-editing"
         editable={editableText}
@@ -71,6 +73,7 @@ class AlarmTextInput extends Component {
         value={this.state.alarmTextValue}
         onChangeText={this.onChangeAlarmTextInput}
         onEndEditing={this.onEndEditingAlarmTextInput}
+        blurOnSubmit={false}
         onFocus={this.onFocusAlarmTextInput}
         placeholder="Name"
         placeholderTextColor={StyleColors.DARK_GRAY}

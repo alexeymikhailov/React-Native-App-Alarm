@@ -35,15 +35,24 @@ class ListAlarmItems extends Component {
     this.alarmNewTextValue=null;
     this.keyboardSpace=0;
     this.listScheduledAlarmItemsRef=React.createRef();
+    this.alarmTextInputRef;
 
     this.state={
       showAlarmEditModal: false
     };
 
+    this.onHandleSetAlarmTextInputRef=(ref) => {
+      this.alarmTextInputRef=ref;
+    };
+
     this.onHandleKeyboardShow=(e) => {
-      if (!this.keyboardSpace) {
-        this.keyboardSpace=e.endCoordinates.screenY;
-      }
+      this.alarmTextInputRef.measure((x, y, width, height, pageX, pageY) => {
+        this.listScheduledAlarmItemsRef.current._wrapperListRef._listRef._scrollRef.scrollTo({
+          x: 0,
+          y: (Math.round((height * 2) + pageY) - e.endCoordinates.screenY),
+          animated: true
+        });
+      });
     };
 
     this.onHandleKeyboardHide=() => {
@@ -102,14 +111,6 @@ class ListAlarmItems extends Component {
           text: newText
         }));
       }
-    };
-
-    this.onHandleSetCoordAlarmTextInput=(data) => {
-      this.listScheduledAlarmItemsRef.current._wrapperListRef._listRef._scrollRef.scrollTo({
-        x: 0,
-        y: (Math.round((data.height * 2) + data.pageY) - this.keyboardSpace),
-        animated: true
-      });
     };
 
     this.onHandleCloseSuccessAlarmEditModal=() => {
@@ -180,8 +181,8 @@ class ListAlarmItems extends Component {
               hourDifferentiationItem={section.hourDifferentiation}
               onPressOpenAlarmModal={this.onHandleOpenAlarmEditModal}
               onChangeCardItemSwitchValueAlarm={this.onChangeCardItemSwitchValueAlarm}
-              onHandleSubmitEndEditing={this.onHandleSubmitEndEditing}
-              onHandleSetCoordAlarmTextInput={this.onHandleSetCoordAlarmTextInput} />
+              onHandleSetAlarmTextInputRef={this.onHandleSetAlarmTextInputRef}
+              onHandleSubmitEndEditing={this.onHandleSubmitEndEditing} />
           )}
           stickySectionHeadersEnabled={false}
           keyboardShouldPersistTaps="always"

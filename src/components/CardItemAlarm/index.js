@@ -18,8 +18,8 @@ const CardItemAlarm=(props) => {
     hourDifferentiationItem,
     onPressOpenAlarmModal,
     onChangeCardItemSwitchValueAlarm,
-    onHandleSubmitEndEditing,
-    onHandleSetCoordAlarmTextInput
+    onHandleSetAlarmTextInputRef,
+    onHandleSubmitEndEditing
   }=props;
 
   return (
@@ -58,10 +58,10 @@ const CardItemAlarm=(props) => {
           </View>
           <View style={styles.currentCardAlarmTextInputWrap}>
             <AlarmTextInput
+              onHandleSetAlarmTextInputRef={onHandleSetAlarmTextInputRef}
               textValue={item.text}
               editableText={item.isTurned}
-              onHandleSubmitEndEditing={(text) => onHandleSubmitEndEditing(text, item, sectionListId)}
-              onHandleSetCoordAlarmTextInput={onHandleSetCoordAlarmTextInput} />
+              onHandleSubmitEndEditing={(text) => onHandleSubmitEndEditing(text, item, sectionListId)} />
           </View>
         </View>
       </View>
