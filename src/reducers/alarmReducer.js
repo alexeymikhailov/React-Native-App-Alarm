@@ -1,8 +1,17 @@
-import moment from 'moment';
 import {
   SCHEDULE_NEW_ALARM,
-  EDIT_SCHEDULED_ALARM
+  EDIT_SCHEDULED_ALARM,
+  DELETE_TRIGGERED_ALARMS
 } from '../actions';
+import {
+  getUniqueId,
+  getDateAlarm,
+  getShortDateAlarm,
+  getCurrentDate,
+  getTimeAlarm,
+  getCurrentTime,
+  getHourDifferentiationAlarm
+} from '../resources/strings';
 
 const initialState={
   scheduledDateAlarmList: [],
@@ -12,11 +21,13 @@ const initialState={
 const alarmReducer=(state=initialState, action) => {
   switch(action.type) {
     case SCHEDULE_NEW_ALARM:
-      const currentScheduledShortDateAlarm=moment(action.data.datetime).format("Do MMM, YY");
-      const currentScheduledTimeAlarm=moment(action.data.datetime).format("HH:mm");
-      const setDateAlarmId=moment(action.data.datetime).format("DDMMYYYY");
+      const currentScheduledShortDateAlarm=getShortDateAlarm(action.data.datetime);
+      const currentScheduledTimeAlarm=getTimeAlarm(action.data.datetime);
+      const setDateAlarmId=getDateAlarm(action.data.datetime);
+      const setHourDifferentiationAlarm=getHourDifferentiationAlarm(currentScheduledTimeAlarm);
+      const setSectionListId=getUniqueId();
+      const setScheduledAlarmId=getUniqueId();
       const currentDateAlarmListIndex=state.scheduledDateAlarmList.indexOf(setDateAlarmId);
-      const setHourDifferentiationAlarm=currentScheduledTimeAlarm >= '06:00' && currentScheduledTimeAlarm < '18:00' ? 'Day' : 'Night';
 
       return {
         ...state,
@@ -41,7 +52,7 @@ const alarmReducer=(state=initialState, action) => {
                         return {
                           ...dataItem,
                           data: dataItem.data.concat({
-                            id: Math.round((Math.random() * 36 ** 12)).toString(36),
+                            id: action.data.alarmId,
                             time: currentScheduledTimeAlarm,
                             text: action.data.text,
                             isTurned: true
@@ -62,11 +73,11 @@ const alarmReducer=(state=initialState, action) => {
                   ...item,
                   data: item.data.concat(
                     {
-                      id: Math.round((Math.random() * 36 ** 12)).toString(36),
+                      id: setSectionListId,
                       hourDifferentiation: setHourDifferentiationAlarm,
                       data: [
                         {
-                          id: Math.round((Math.random() * 36 ** 12)).toString(36),
+                          id: action.data.alarmId,
                           time: currentScheduledTimeAlarm,
                           text: action.data.text,
                           isTurned: true
@@ -83,11 +94,11 @@ const alarmReducer=(state=initialState, action) => {
                   date: currentScheduledShortDateAlarm,
                   data: [
                     {
-                      id: Math.round((Math.random() * 36 ** 12)).toString(36),
+                      id: setSectionListId,
                       hourDifferentiation: setHourDifferentiationAlarm,
                       data: [
                         {
-                          id: Math.round((Math.random() * 36 ** 12)).toString(36),
+                          id: action.data.alarmId,
                           time: currentScheduledTimeAlarm,
                           text: action.data.text,
                           isTurned: true
@@ -99,13 +110,82 @@ const alarmReducer=(state=initialState, action) => {
       };
 
     case EDIT_SCHEDULED_ALARM:
-      let currentScheduledNewAlarmOtherSection;
-      const currentScheduledNewTimeAlarm=action.data.time && moment(action.data.time).format("HH:mm");
+      let currentScheduledNewAlarm;
+      let moveCurrentScheduledNewAlarm=false;
+      const currentScheduledNewTimeAlarm=getTimeAlarm(action.data.time);
+      const currentHourDifferentiationNewAlarm=getHourDifferentiationAlarm(currentScheduledNewTimeAlarm);
 
       return {
         ...state,
         scheduledAlarmList: state.scheduledAlarmList.map((item) => {
           if (item.dateId === action.data.dateId) {
+            const existCurrentHourDifferentiation=item.data.some((dataItem) => {
+              if (dataItem.hourDifferentiation && dataItem.hourDifferentiation === currentHourDifferentiationNewAlarm) return true;
+              return false;
+            });
+
+            if (existCurrentHourDifferentiation) {
+              return {
+                ...item,
+                data: item.data.map((dataItem) => {
+                  if (dataItem.id === action.data.sectionListId) {
+                    return {
+                      ...dataItem,
+                      data: dataItem.data.map((innerDataItem) => {
+                        if (innerDataItem.id === action.data.alarmId) {
+                          currentScheduledNewAlarm={
+                            ...innerDataItem,
+                            time: currentScheduledNewTimeAlarm,
+                            text: action.data.text && action.data.text !== ''
+                              ? action.data.text
+                                : 'null',
+                            isTurned:
+                              typeof action.data.switchValue !== 'undefined'
+                                ? action.data.switchValue
+                                  : innerDataItem.isTurned
+                          };
+
+                          return {
+                            ...currentScheduledNewAlarm
+                          };
+                        }
+                        return innerDataItem;
+                      }).filter((innerDataItem) => {
+                        if (innerDataItem.id === currentScheduledNewAlarm.id
+                          && currentHourDifferentiationNewAlarm && currentHourDifferentiationNewAlarm !== dataItem.hourDifferentiation) {
+                          moveCurrentScheduledNewAlarm=true;
+                          return false;
+                        }
+                        return true;
+                      })
+                    }
+                  }
+                  return dataItem;
+                }).filter((dataItem) => {
+                  return dataItem.data.length > 0;
+                }).map((dataItem) => {
+                  if (dataItem.hourDifferentiation === currentHourDifferentiationNewAlarm
+                    && moveCurrentScheduledNewAlarm) {
+                    return {
+                      ...dataItem,
+                      data: dataItem.data.concat(currentScheduledNewAlarm)
+                    };
+                  }
+                  return dataItem;
+                }).map((dataItem) => {
+                  return {
+                    ...dataItem,
+                    data: dataItem.data.sort((a, b) => {
+                      return b.time > a.time
+                              ? -1
+                                : a.time > b.time
+                                  ? 1
+                                    : 0;
+                    })
+                  }
+                })
+              }
+            }
             return {
               ...item,
               data: item.data.map((dataItem) => {
@@ -114,21 +194,43 @@ const alarmReducer=(state=initialState, action) => {
                     ...dataItem,
                     data: dataItem.data.map((innerDataItem) => {
                       if (innerDataItem.id === action.data.alarmId) {
-                        return {
+                        currentScheduledNewAlarm={
                           ...innerDataItem,
-                          time: currentScheduledNewTimeAlarm || innerDataItem.time,
-                          text: action.data.text || '',
+                          time: currentScheduledNewTimeAlarm,
+                          text: action.data.text && action.data.text !== ''
+                            ? action.data.text
+                              : 'null',
                           isTurned:
                             typeof action.data.switchValue !== 'undefined'
                               ? action.data.switchValue
                                 : innerDataItem.isTurned
-                        }
+                        };
+
+                        return {
+                          ...currentScheduledNewAlarm
+                        };
                       }
                       return innerDataItem;
+                    }).filter((innerDataItem) => {
+                      if (innerDataItem.id === currentScheduledNewAlarm.id
+                        && currentHourDifferentiationNewAlarm && currentHourDifferentiationNewAlarm !== dataItem.hourDifferentiation) {
+                        return false;
+                      }
+                      return true;
                     })
                   }
                 }
                 return dataItem;
+              }).filter((dataItem) => {
+                return dataItem.data.length > 0;
+              }).concat({
+                id: getUniqueId(),
+                hourDifferentiation: currentHourDifferentiationNewAlarm,
+                data: [
+                  {
+                    ...currentScheduledNewAlarm
+                  }
+                ]
               }).map((dataItem) => {
                 return {
                   ...dataItem,
@@ -144,6 +246,39 @@ const alarmReducer=(state=initialState, action) => {
             }
           }
           return item;
+        })
+      };
+
+    case DELETE_TRIGGERED_ALARMS:
+      let deleteDateId=false;
+
+      return {
+        ...state,
+        scheduledAlarmList: state.scheduledAlarmList.map((item) => {
+          return {
+            ...item,
+            data: item.data.map((dataItem) => {
+              return {
+                ...dataItem,
+                data: dataItem.data.filter((innerDataItem) => {
+                  if (getCurrentDate() > item.dateId
+                    || getCurrentTime() >= innerDataItem.time) return false;
+                  return true;
+                })
+              }
+            }).filter((item) => {
+              return item.data.length > 0;
+            })
+          }
+        }).filter((item) => {
+          if (!(item.data.length > 0)) {
+            deleteDateId=item.dateId;
+            return false;
+          }
+          return true;
+        }),
+        scheduledDateAlarmList: state.scheduledDateAlarmList.filter((item) => {
+          return item !== deleteDateId;
         })
       };
 

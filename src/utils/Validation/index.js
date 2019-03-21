@@ -1,28 +1,24 @@
 import moment from 'moment';
-
-const getDateAlarmId=(scheduledDateTime) => {
-  return moment(scheduledDateTime).format("DDMMYYYY");
-};
-
-const getScheduledTimeAlarm=(scheduledDateTime) => {
-  return moment(scheduledDateTime).format("HH:mm");
-};
-
-const getHourDifferentiationAlarm=(currentScheduledTimeAlarm) => {
-  return currentScheduledTimeAlarm >= '06:00' && currentScheduledTimeAlarm < '18:00' ? 'Day' : 'Night';
-};
+import {
+  getDateAlarm,
+  getCurrentDate,
+  getTimeAlarm,
+  getCurrentTime,
+  getHourDifferentiationAlarm
+} from '../../resources/strings';
 
 export const checkScheduleCurrentTimeAlarm=(scheduledDateTime) => {
-  return moment().format("HH:mm") === moment(scheduledDateTime).format("HH:mm");
+  return getCurrentDate() === getDateAlarm(scheduledDateTime)
+    && getCurrentTime() === getTimeAlarm(scheduledDateTime);
 };
 
 export const existScheduledDateTimeAlarm=(scheduledAlarmList, scheduledDateTime) => {
   return scheduledAlarmList.some((item) => {
-    if (item.dateId === getDateAlarmId(scheduledDateTime)) {
+    if (item.dateId === getDateAlarm(scheduledDateTime)) {
       return item.data.some((dataItem) => {
-        if (dataItem.hourDifferentiation === getHourDifferentiationAlarm(getScheduledTimeAlarm(scheduledDateTime))) {
+        if (dataItem.hourDifferentiation === getHourDifferentiationAlarm(getTimeAlarm(scheduledDateTime))) {
           return dataItem.data.some((innerDataItem) => {
-            if (innerDataItem.time === getScheduledTimeAlarm(scheduledDateTime)) {
+            if (innerDataItem.time === getTimeAlarm(scheduledDateTime)) {
               return true;
             }
             return false;
@@ -37,9 +33,9 @@ export const existScheduledDateTimeAlarm=(scheduledAlarmList, scheduledDateTime)
 
 export const checkEditScheduledAlarmItem=(scheduledAlarmList, scheduledDateTime, alarmId) => {
   return scheduledAlarmList.some((item) => {
-    if (item.dateId === getDateAlarmId(scheduledDateTime)) {
+    if (item.dateId === getDateAlarm(scheduledDateTime)) {
       return item.data.some((dataItem) => {
-        if (dataItem.hourDifferentiation === getHourDifferentiationAlarm(getScheduledTimeAlarm(scheduledDateTime))) {
+        if (dataItem.hourDifferentiation === getHourDifferentiationAlarm(getTimeAlarm(scheduledDateTime))) {
           return dataItem.data.some((innerDataItem) => {
             if (innerDataItem.id === alarmId) {
               return true;
