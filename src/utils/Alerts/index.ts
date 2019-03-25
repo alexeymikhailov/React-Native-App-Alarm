@@ -1,12 +1,14 @@
-import React, { Component } from 'react';
-import {
-  Alert
-} from 'react-native';
+import { Alert } from 'react-native';
+
+interface AlarmAlertDialogBoxButtons {
+  text: string,
+  onPress: () => boolean
+}
 
 export const onHandleAlarmAlertDialogBox=(
-  title='',
-  message='',
-  buttons=[
+  title: string='',
+  message: string='',
+  buttons: AlarmAlertDialogBoxButtons[]=[
     {
       text: 'OK',
       onPress: () => true

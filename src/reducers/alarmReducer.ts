@@ -1,8 +1,13 @@
+import { Reducer } from 'redux';
 import {
   SCHEDULE_NEW_ALARM,
   EDIT_SCHEDULED_ALARM,
   DELETE_TRIGGERED_ALARMS
-} from '../actions';
+} from '../constants';
+import {
+  Item,
+  AlarmState
+} from '../models';
 import {
   getUniqueId,
   getDateAlarm,
@@ -13,21 +18,20 @@ import {
   getHourDifferentiationAlarm
 } from '../resources/strings';
 
-const initialState={
+export const initialState: AlarmState={
   scheduledDateAlarmList: [],
   scheduledAlarmList: []
 };
 
-const alarmReducer=(state=initialState, action) => {
+const alarmReducer: Reducer<AlarmState>=(state=initialState, action) => {
   switch(action.type) {
     case SCHEDULE_NEW_ALARM:
-      const currentScheduledShortDateAlarm=getShortDateAlarm(action.data.datetime);
-      const currentScheduledTimeAlarm=getTimeAlarm(action.data.datetime);
-      const setDateAlarmId=getDateAlarm(action.data.datetime);
-      const setHourDifferentiationAlarm=getHourDifferentiationAlarm(currentScheduledTimeAlarm);
-      const setSectionListId=getUniqueId();
-      const setScheduledAlarmId=getUniqueId();
-      const currentDateAlarmListIndex=state.scheduledDateAlarmList.indexOf(setDateAlarmId);
+      const currentScheduledShortDateAlarm: string=getShortDateAlarm(action.data.datetime);
+      const currentScheduledTimeAlarm: string=getTimeAlarm(action.data.datetime);
+      const setDateAlarmId: string=getDateAlarm(action.data.datetime);
+      const setHourDifferentiationAlarm: string=getHourDifferentiationAlarm(currentScheduledTimeAlarm);
+      const setSectionListId: number=getUniqueId();
+      const currentDateAlarmListIndex: number=state.scheduledDateAlarmList.indexOf(setDateAlarmId);
 
       return {
         ...state,
@@ -110,10 +114,10 @@ const alarmReducer=(state=initialState, action) => {
       };
 
     case EDIT_SCHEDULED_ALARM:
-      let currentScheduledNewAlarm;
-      let moveCurrentScheduledNewAlarm=false;
-      const currentScheduledNewTimeAlarm=getTimeAlarm(action.data.time);
-      const currentHourDifferentiationNewAlarm=getHourDifferentiationAlarm(currentScheduledNewTimeAlarm);
+      let currentScheduledNewAlarm: Item;
+      let moveCurrentScheduledNewAlarm: boolean=false;
+      const currentScheduledNewTimeAlarm: string=getTimeAlarm(action.data.time);
+      const currentHourDifferentiationNewAlarm: string=getHourDifferentiationAlarm(currentScheduledNewTimeAlarm);
 
       return {
         ...state,
@@ -250,7 +254,7 @@ const alarmReducer=(state=initialState, action) => {
       };
 
     case DELETE_TRIGGERED_ALARMS:
-      let deleteDateId=false;
+      let deleteDateId: string;
 
       return {
         ...state,
@@ -278,7 +282,8 @@ const alarmReducer=(state=initialState, action) => {
           return true;
         }),
         scheduledDateAlarmList: state.scheduledDateAlarmList.filter((item) => {
-          return item !== deleteDateId;
+          if (deleteDateId) return item !== deleteDateId;
+          return item;
         })
       };
 

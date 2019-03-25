@@ -1,4 +1,4 @@
-import moment from 'moment';
+import { AlarmItem } from '../../models';
 import {
   getDateAlarm,
   getCurrentDate,
@@ -7,12 +7,12 @@ import {
   getHourDifferentiationAlarm
 } from '../../resources/strings';
 
-export const checkScheduleCurrentTimeAlarm=(scheduledDateTime) => {
+export const checkScheduleCurrentTimeAlarm=(scheduledDateTime: object) => {
   return getCurrentDate() === getDateAlarm(scheduledDateTime)
     && getCurrentTime() === getTimeAlarm(scheduledDateTime);
 };
 
-export const existScheduledDateTimeAlarm=(scheduledAlarmList, scheduledDateTime) => {
+export const existScheduledDateTimeAlarm=(scheduledAlarmList: AlarmItem[], scheduledDateTime: object) => {
   return scheduledAlarmList.some((item) => {
     if (item.dateId === getDateAlarm(scheduledDateTime)) {
       return item.data.some((dataItem) => {
@@ -31,7 +31,7 @@ export const existScheduledDateTimeAlarm=(scheduledAlarmList, scheduledDateTime)
   });
 };
 
-export const checkEditScheduledAlarmItem=(scheduledAlarmList, scheduledDateTime, alarmId) => {
+export const checkEditScheduledAlarmItem=(scheduledAlarmList: AlarmItem[], scheduledDateTime: object, alarmId: number) => {
   return scheduledAlarmList.some((item) => {
     if (item.dateId === getDateAlarm(scheduledDateTime)) {
       return item.data.some((dataItem) => {

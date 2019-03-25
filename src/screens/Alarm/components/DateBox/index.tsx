@@ -5,7 +5,11 @@ import {
 } from 'react-native';
 import styles from './styles';
 
-const DateBox=(props) => (
+interface DateBoxProps {
+  date?: string
+}
+
+const DateBox: React.FC<DateBoxProps>=(props) => (
   <View style={styles.dateBoxContentWrap}>
     <Text style={styles.textDateBox} numberOfLines={1}>
       {props.date || 'Set the alarm'}

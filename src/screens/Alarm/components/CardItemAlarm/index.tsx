@@ -1,17 +1,30 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text,
-  TextInput,
   View,
   TouchableOpacity,
   Switch
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import {
+  Item,
+  TextInputField
+} from '../../../../models';
 import AlarmTextInput from '../AlarmTextInput';
 import StyleColors from '../../../../resources/style/colors';
 import styles from './styles';
 
-const CardItemAlarm=(props) => {
+interface CardItemAlarmProps {
+  item: Item,
+  sectionListId: number,
+  hourDifferentiationItem: string,
+  onPressOpenAlarmModal: (item: Item, sectionListId: number) => void
+  onChangeCardItemSwitchValueAlarm: (value: boolean, item: Item, sectionListId: number) => void
+  onHandleSetAlarmTextInputRef: (ref: TextInputField) => void,
+  onHandleSubmitEndEditing: (textValue: string, item: Item, sectionListId: number) => void,
+}
+
+const CardItemAlarm: React.FC<CardItemAlarmProps>=(props) => {
   const {
     item,
     sectionListId,
@@ -50,6 +63,7 @@ const CardItemAlarm=(props) => {
             <View style={styles.currentCardItemAlarmSwitchWrap}>
               <Switch
                 trackColor={{
+                  false: StyleColors.WHITE,
                   true: StyleColors.BLACK
                 }}
                 onValueChange={(value) => onChangeCardItemSwitchValueAlarm(value, item, sectionListId)}

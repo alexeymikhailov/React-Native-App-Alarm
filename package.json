@@ -4,26 +4,37 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest"
+    "test": "jest",
+    "check:types": "tsc"
   },
   "dependencies": {
     "moment": "^2.24.0",
     "react": "16.6.3",
     "react-native": "0.58.6",
     "react-native-date-picker": "^2.2.1",
+    "react-native-gesture-handler": "^1.1.0",
     "react-native-push-notification": "^3.1.2",
     "react-native-swiper": "^1.5.14",
     "react-native-vector-icons": "^6.3.0",
+    "react-navigation": "^3.5.1",
     "react-redux": "^6.0.1",
     "redux": "^4.0.1",
-    "redux-persist": "^5.10.0"
+    "redux-persist": "^5.10.0",
+    "typesafe-actions": "^3.2.1"
   },
   "devDependencies": {
+    "@types/react": "^16.8.8",
+    "@types/react-native": "^0.57.41",
+    "@types/react-native-push-notification": "^3.0.4",
+    "@types/react-native-vector-icons": "^4.6.4",
+    "@types/react-redux": "^7.0.5",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "24.4.0",
     "jest": "24.4.0",
     "metro-react-native-babel-preset": "0.53.0",
-    "react-test-renderer": "16.6.3"
+    "react-native-typescript-transformer": "^1.2.12",
+    "react-test-renderer": "16.6.3",
+    "typescript": "^3.3.4000"
   },
   "jest": {
     "preset": "react-native"

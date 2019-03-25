@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
   Text,
   View
@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import StyleColors from '../../../../resources/style/colors';
 import styles from './styles';
 
-const NoScheduledAlarms=() => (
+const NoScheduledAlarms: React.FC<{}>=() => (
   <View style={styles.noScheduledAlarmsContentWrap}>
     <View style={styles.noScheduledAlarmsIconWrap}>
       <Icon

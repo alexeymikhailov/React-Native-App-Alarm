@@ -1,21 +1,34 @@
 import React from 'react';
 import {
-  SafeAreaView,
   Text,
   View,
-  TouchableOpacity,
   Modal
 } from 'react-native';
+import { SafeAreaView } from 'react-navigation';
 import DatePicker from 'react-native-date-picker';
 import {
   getCurrentDateTime
 } from '../../../../../resources/strings';
-import TitleHeader from '../../TitleHeader';
+import TouchButton from '../../../../../common/components/TouchButton';
+import TitleHeader from '../../../../../common/components/TitleHeader';
 import AlarmTextInput from '../../AlarmTextInput';
-import StyleColors from '../../../../../resources/style/colors';
 import styles from './styles';
 
-const AlarmModal=(props) => {
+interface AlarmModalProps {
+  title: string,
+  minimumDatePicker: object | null,
+  modeDatePicker: string,
+  textValue: string,
+  visible: boolean,
+  onPressCancelAlarmModal: () => void,
+  onPressCloseSuccessAlarmModal: () => void,
+  onChangeDatePicker: (value: object) => void,
+  onHandleSetDefaultAlarmTextInput: (textValue: string) => void,
+  onHandleSubmitEndEditing: (textValue: string) => void,
+  children?: () => React.ReactNode
+}
+
+const AlarmModal: React.FC<AlarmModalProps>=(props) => {
   const {
     title,
     minimumDatePicker,
@@ -44,16 +57,14 @@ const AlarmModal=(props) => {
         }}>
         <View style={styles.alarmModalWrap}>
           <View style={styles.alarmModalHeaderContentWrap}>
-            <TouchableOpacity
-              onPress={onPressCancelAlarmModal}
-              activityOpacity={.5}>
+            <TouchButton
+              onPress={onPressCancelAlarmModal}>
               <Text style={styles.textAlarmModalHeaderContentCancel}>Cancel</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={onPressCloseSuccessAlarmModal}
-              activityOpacity={.5}>
+            </TouchButton>
+            <TouchButton
+              onPress={onPressCloseSuccessAlarmModal}>
               <Text style={styles.textAlarmModalHeaderContentCloseSuccess}>Done</Text>
-            </TouchableOpacity>
+            </TouchButton>
           </View>
           <TitleHeader
             title={title} />
@@ -62,7 +73,7 @@ const AlarmModal=(props) => {
               date={getCurrentDateTime()}
               minimumDate={minimumDatePicker}
               mode={modeDatePicker}
-              onDateChange={(value) => onChangeDatePicker(value)} />
+              onDateChange={onChangeDatePicker} />
           </View>
           <View style={styles.alarmModalTextInputWrap}>
             <AlarmTextInput

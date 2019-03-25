@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react'
 import configureStore from '../../store';
@@ -9,7 +9,7 @@ const {
   persistor
 }=configureStore();
 
-const App=() => (
+const App: React.FC<{}>=() => (
   <Provider store={store}>
     <PersistGate
       loading={null}
