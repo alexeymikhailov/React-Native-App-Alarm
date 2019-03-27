@@ -41,6 +41,7 @@ interface AlarmSwiperContentProps {
 interface AlarmSwiperContentState {
   showAlarmModal: boolean,
   title: string,
+  datePicker: object,
   minimumDatePicker: object | null,
   modeDatePicker: string,
   onHandleCloseSuccessAlarmModal?: (scheduledDateTime: object, alarmTextValue: string, currentOpenAlarm: CurrentOpenItem) => boolean
@@ -71,6 +72,7 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
     this.state={
       showAlarmModal: false,
       title: '',
+      datePicker: getCurrentDateTime(),
       minimumDatePicker: getCurrentDateTime(),
       modeDatePicker: 'datetime'
     };
@@ -163,7 +165,7 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
   private onHandleCloseSuccessAlarmModal=() => {
     let executionResultCloseAlarmModal: boolean | undefined;
 
-    if (checkScheduleCurrentTimeAlarm(this.scheduledDateTime)) {
+    if (checkScheduleCurrentTimeAlarm(this.scheduledDateTime || getCurrentDateTime())) {
       onHandleAlarmAlertDialogBox('Error', ERROR_SCHEDULE_CURRENT_TIME_ALARM);
       return;
     }
@@ -196,6 +198,7 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
       <AlarmSwiperContentWrap>
         <AlarmModal
           title={this.state.title}
+          datePicker={this.state.datePicker}
           minimumDatePicker={this.state.minimumDatePicker}
           modeDatePicker={this.state.modeDatePicker}
           textValue={this.currentOpenAlarm && this.currentOpenAlarm.alarmItem.text || "Alarm"}

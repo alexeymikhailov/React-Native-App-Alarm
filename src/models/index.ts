@@ -26,6 +26,7 @@ export interface CurrentOpenItem {
 
 export interface ModalData {
   title: string,
+  datePicker: object,
   minimumDatePicker: object | null,
   modeDatePicker: string,
   onHandleCloseSuccessAlarmModal: (scheduledDateTime: object, alarmTextValue: string, currentOpenAlarm: CurrentOpenItem) => boolean,

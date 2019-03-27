@@ -1,7 +1,7 @@
 import styled, { css } from '@emotion/native';
 import StyleColors from '../../../../../resources/style/colors';
 
-export const AlarmModalWrap=styled.View`
+export const AlarmModalWrap=css`
   padding-top: 10px;
   padding-horizontal: 15px;
 `;

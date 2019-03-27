@@ -36,6 +36,7 @@ class AlarmHeader extends Component<CardItemAlarmProps, {}> {
   private onHandleOpenAlarmAddModal=() => {
     this.props.onHandleOpenAlarmAddModal({
       title: 'Adding',
+      datePicker: getCurrentDateTime(),
       minimumDatePicker: getCurrentDateTime(),
       modeDatePicker: 'datetime',
       onHandleCloseSuccessAlarmModal: this.onHandleCloseSuccessAlarmAddModal

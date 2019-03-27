@@ -26,7 +26,7 @@ export const getCurrentDateTime=() => {
 };
 
 export const getTimeAlarm=(datetime: object) => {
-  return moment(datetime, 'h:mm').format('HH:mm')
+  return moment(datetime, 'h:mm').format('HH:mm');
 };
 
 export const getCurrentTime=() => {

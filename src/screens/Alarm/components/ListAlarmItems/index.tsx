@@ -54,6 +54,10 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
     this.props.onHandleOpenAlarmEditModal({
       currentOpenAlarm,
       title: 'Rearrange',
+      datePicker: getDateTimeAlarm({
+        dateId: this.props.dateId,
+        time: alarmItem.time
+      }),
       minimumDatePicker: null,
       modeDatePicker: 'time',
       onHandleCloseSuccessAlarmModal: this.onHandleCloseSuccessAlarmEditModal
@@ -118,7 +122,13 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
   };
 
   private onHandleCloseSuccessAlarmEditModal=(scheduledTime: object, alarmNewTextValue: string, currentOpenAlarm: CurrentOpenItem) => {
-    if (checkEditScheduledAlarmItem(this.props.scheduledAlarmList, scheduledTime, currentOpenAlarm.alarmItem.id)) {
+    if (checkEditScheduledAlarmItem(
+      this.props.scheduledAlarmList,
+      scheduledTime || getDateTimeAlarm({
+        dateId: this.props.dateId,
+        time: currentOpenAlarm.alarmItem.time
+      }),
+      currentOpenAlarm.alarmItem.id)) {
       onHandleAlarmAlertDialogBox('Error', ERROR_SCHEDULED_TIME_ALARM);
       return false;
     } else {
@@ -126,7 +136,7 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
         dateId: this.props.dateId,
         alarmId: currentOpenAlarm.alarmItem.id,
         sectionListId: currentOpenAlarm.sectionListId,
-        time: scheduledTime,
+        time: scheduledTime || currentOpenAlarm.alarmItem.time,
         text: alarmNewTextValue
       };
 
