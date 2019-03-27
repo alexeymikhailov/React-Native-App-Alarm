@@ -180,7 +180,7 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
               onHandleSubmitEndEditing={this.onHandleSubmitEndEditing} />
           )}
           stickySectionHeadersEnabled={false}
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps="never"
           keyExtractor={(item) => `${item.id}`.toString()} />
       </View>
     );

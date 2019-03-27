@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal } from 'react-native';
+import { Modal, ScrollView } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {
   getCurrentDateTime
@@ -53,35 +53,40 @@ const AlarmModal: React.FC<AlarmModalProps>=(props) => {
       visible={visible}
       transparent={true}>
       <SafeAreaView>
-        <AlarmModalWrap>
-          <AlarmModalHeaderContentWrap>
-            <TouchButton
-              onPress={onPressCancelAlarmModal}>
-              <TextAlarmModalHeaderContentCancel>Cancel</TextAlarmModalHeaderContentCancel>
-            </TouchButton>
-            <TouchButton
-              onPress={onPressCloseSuccessAlarmModal}>
-              <TextAlarmModalHeaderContentCloseSuccess>Done</TextAlarmModalHeaderContentCloseSuccess>
-            </TouchButton>
-          </AlarmModalHeaderContentWrap>
-          <TitleHeader
-            title={title} />
-          <AlarmModalDateTimePickerWrap>
-            <DatePicker
-              date={getCurrentDateTime()}
-              minimumDate={minimumDatePicker}
-              mode={modeDatePicker}
-              onDateChange={onChangeDatePicker} />
-          </AlarmModalDateTimePickerWrap>
-          <AlarmModalTextInputWrap>
-            <AlarmTextInput
-              textValue={textValue !== 'null' ? textValue : ''}
-              onHandleSetDefaultAlarmTextInput={onHandleSetDefaultAlarmTextInput}
-              onHandleSubmitEndEditing={onHandleSubmitEndEditing}
-              style={AlarmModalTextInput} />
-          </AlarmModalTextInputWrap>
-          { children && children() }
-        </AlarmModalWrap>
+        <ScrollView
+          keyboardShouldPersistTaps="never"
+          scrollEnabled={false}
+          showsVerticalScrollIndicator={false}>
+          <AlarmModalWrap>
+            <AlarmModalHeaderContentWrap>
+              <TouchButton
+                onPress={onPressCancelAlarmModal}>
+                <TextAlarmModalHeaderContentCancel>Cancel</TextAlarmModalHeaderContentCancel>
+              </TouchButton>
+              <TouchButton
+                onPress={onPressCloseSuccessAlarmModal}>
+                <TextAlarmModalHeaderContentCloseSuccess>Done</TextAlarmModalHeaderContentCloseSuccess>
+              </TouchButton>
+            </AlarmModalHeaderContentWrap>
+            <TitleHeader
+              title={title} />
+            <AlarmModalDateTimePickerWrap>
+              <DatePicker
+                date={getCurrentDateTime()}
+                minimumDate={minimumDatePicker}
+                mode={modeDatePicker}
+                onDateChange={onChangeDatePicker} />
+            </AlarmModalDateTimePickerWrap>
+            <AlarmModalTextInputWrap>
+              <AlarmTextInput
+                textValue={textValue !== 'null' ? textValue : ''}
+                onHandleSetDefaultAlarmTextInput={onHandleSetDefaultAlarmTextInput}
+                onHandleSubmitEndEditing={onHandleSubmitEndEditing}
+                style={AlarmModalTextInput} />
+            </AlarmModalTextInputWrap>
+            { children && children() }
+          </AlarmModalWrap>
+        </ScrollView>
       </SafeAreaView>
     </Modal>
   );

@@ -61,7 +61,7 @@ class AlarmTextInput extends Component<AlarmTextInputProps, AlarmTextInputState>
     }
   }
 
-  public omponentDidUpdate(prevProps: AlarmTextInputProps): void {
+  public componentDidUpdate(prevProps: AlarmTextInputProps): void {
     if (prevProps.textValue !== this.props.textValue) {
       this.setState({
         alarmTextValue: this.props.textValue
