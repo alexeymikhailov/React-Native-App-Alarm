@@ -1,39 +1,44 @@
-import { StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 import StyleColors from '../../../../resources/style/colors';
 
-export default StyleSheet.create({
-  currentCardItemAlarmWrap: {
-    flexDirection: 'row',
-    paddingHorizontal: 10,
-    backgroundColor: StyleColors.LIGHT_GRAYISH_RED,
-    borderRadius: 8
-  },
-  currentCardItemAlarmIconWrap: {
-    alignSelf: 'center',
-    marginRight: 10
-  },
-  currentCardItemAlarmContentDetailsWrap: {
-    flex: 1
-  },
-  currentCardItemAlarmScheduledTimeWrap: {
-    flexDirection: 'row'
-  },
-  textCardItemAlarmScheduledTime: {
-    color: StyleColors.BLACK,
-    fontSize: 65,
-    fontWeight: '100'
-  },
-  currentCardItemAlarmSwitchWrap: {
-    flex: 1,
-    alignItems: 'flex-end',
-    alignSelf: 'center'
-  },
-  currentCardAlarmTextInputWrap: {
-    bottom: 10
-  },
-  cardItemAlarmInput: {
-    color: StyleColors.BLACK,
-    fontSize: 17,
-    fontWeight: '300'
-  }
-});
+export const CurrentCardItemAlarmWrap=styled.View`
+  flex-direction: row;
+  padding-horizontal: 10px;
+  background-color: ${StyleColors.LIGHT_GRAYISH_RED};
+  border-radius: 8px;
+`;
+
+export const CurrentCardItemAlarmIconWrap=styled.View`
+  align-self: center;
+  margin-right: 10px;
+`;
+
+export const CurrentCardItemAlarmContentDetailsWrap=styled.View`
+  flex: 1;
+`;
+
+export const CurrentCardItemAlarmScheduledTimeWrap=styled.View`
+  flex-direction: row;
+`;
+
+export const TextCardItemAlarmScheduledTime=styled.Text`
+  color: ${StyleColors.BLACK};
+  font-size: 65;
+  font-weight: 100;
+`;
+
+export const CurrentCardItemAlarmSwitchWrap=styled.View`
+  flex: 1;
+  align-items: flex-end;
+  align-self: center;
+`;
+
+export const CurrentCardAlarmTextInputWrap=styled.View`
+  bottom: 10px;
+`;
+
+export const CardItemAlarmInput=styled.View`
+  color: ${StyleColors.BLACK};
+  font-size: 17;
+  font-weight: 300;
+`;

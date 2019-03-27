@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Text,
   View,
   TouchableOpacity,
   Switch
@@ -12,7 +11,15 @@ import {
 } from '../../../../models';
 import AlarmTextInput from '../AlarmTextInput';
 import StyleColors from '../../../../resources/style/colors';
-import styles from './styles';
+import {
+  CurrentCardItemAlarmWrap,
+  CurrentCardItemAlarmIconWrap,
+  CurrentCardItemAlarmContentDetailsWrap,
+  CurrentCardItemAlarmScheduledTimeWrap,
+  TextCardItemAlarmScheduledTime,
+  CurrentCardItemAlarmSwitchWrap,
+  CurrentCardAlarmTextInputWrap
+} from './styles';
 
 interface CardItemAlarmProps {
   item: Item,
@@ -40,10 +47,10 @@ const CardItemAlarm: React.FC<CardItemAlarmProps>=(props) => {
       disabled={!item.isTurned}
       onPress={() => onPressOpenAlarmModal(item, sectionListId)}
       activeOpacity={.5}>
-      <View style={[styles.currentCardItemAlarmWrap, {
+      <CurrentCardItemAlarmWrap style={{
         opacity: item.isTurned ? 1 : .5
-      }]}>
-        <View style={styles.currentCardItemAlarmIconWrap}>
+      }}>
+        <CurrentCardItemAlarmIconWrap>
           <Icon
             name={hourDifferentiationItem == 'Day' ? "ios-sunny" : "ios-moon"}
             size={34}
@@ -52,15 +59,15 @@ const CardItemAlarm: React.FC<CardItemAlarmProps>=(props) => {
                   : hourDifferentiationItem == 'Day'
                     ? StyleColors.VIVID_YELLOW
                       : StyleColors.DARK_BLUE} />
-        </View>
-        <View style={styles.currentCardItemAlarmContentDetailsWrap}>
-          <View style={styles.currentCardItemAlarmScheduledTimeWrap}>
+        </CurrentCardItemAlarmIconWrap>
+        <CurrentCardItemAlarmContentDetailsWrap>
+          <CurrentCardItemAlarmScheduledTimeWrap>
             <View>
-              <Text style={styles.textCardItemAlarmScheduledTime}>
+              <TextCardItemAlarmScheduledTime>
                 {item.time}
-              </Text>
+              </TextCardItemAlarmScheduledTime>
             </View>
-            <View style={styles.currentCardItemAlarmSwitchWrap}>
+            <CurrentCardItemAlarmSwitchWrap>
               <Switch
                 trackColor={{
                   false: StyleColors.WHITE,
@@ -68,17 +75,17 @@ const CardItemAlarm: React.FC<CardItemAlarmProps>=(props) => {
                 }}
                 onValueChange={(value) => onChangeCardItemSwitchValueAlarm(value, item, sectionListId)}
                 value={item.isTurned} />
-            </View>
-          </View>
-          <View style={styles.currentCardAlarmTextInputWrap}>
+            </CurrentCardItemAlarmSwitchWrap>
+          </CurrentCardItemAlarmScheduledTimeWrap>
+          <CurrentCardAlarmTextInputWrap>
             <AlarmTextInput
               onHandleSetAlarmTextInputRef={onHandleSetAlarmTextInputRef}
               textValue={item.text !== 'null' ? item.text : ''}
               editableText={item.isTurned}
               onHandleSubmitEndEditing={(text) => onHandleSubmitEndEditing(text, item, sectionListId)} />
-          </View>
-        </View>
-      </View>
+          </CurrentCardAlarmTextInputWrap>
+        </CurrentCardItemAlarmContentDetailsWrap>
+      </CurrentCardItemAlarmWrap>
     </TouchableOpacity>
   );
 }

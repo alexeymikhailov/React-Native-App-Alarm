@@ -1,39 +1,39 @@
-import { StyleSheet } from 'react-native';
+import styled, { css } from '@emotion/native';
 import StyleColors from '../../../../../resources/style/colors';
 
-export default StyleSheet.create({
-  alarmModalContainer: {
-    flex: 1,
-    backgroundColor: StyleColors.LIGHT_RED
-  },
-  alarmModalWrap: {
-    paddingTop: 10,
-    paddingHorizontal: 15
-  },
-  alarmModalHeaderContentWrap: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  textAlarmModalHeaderContentCancel: {
-    color: StyleColors.DARK_BLUE,
-    fontSize: 18,
-    fontWeight: '300'
-  },
-  textAlarmModalHeaderContentCloseSuccess: {
-    color: StyleColors.DARK_BLUE,
-    fontSize: 18,
-    fontWeight: '300'
-  },
-  alarmModalDateTimePickerWrap: {
-    alignItems: 'center'
-  },
-  alarmModalTextInputWrap: {
-    marginTop: 10
-  },
-  alarmModalTextInput: {
-    paddingVertical: 7,
-    paddingHorizontal: 15,
-    backgroundColor: StyleColors.GRAYISH_ORANGE,
-    borderRadius: 4
-  }
-});
+export const AlarmModalWrap=styled.View`
+  padding-top: 10px;
+  padding-horizontal: 15px;
+`;
+
+export const AlarmModalHeaderContentWrap=styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const TextAlarmModalHeaderContentCancel=styled.Text`
+  color: ${StyleColors.DARK_BLUE};
+  font-size: 18;
+  font-weight: 300;
+`;
+
+export const TextAlarmModalHeaderContentCloseSuccess=styled.Text`
+  color: ${StyleColors.DARK_BLUE};
+  font-size: 18;
+  font-weight: 300;
+`;
+
+export const AlarmModalDateTimePickerWrap=styled.View`
+  align-items: center;
+`;
+
+export const AlarmModalTextInputWrap=styled.View`
+  margin-top: 10px;
+`;
+
+export const AlarmModalTextInput=css`
+  padding-vertical: 7px;
+  padding-horizontal: 15px;
+  background-color: ${StyleColors.GRAYISH_ORANGE};
+  border-radius: 4px;
+`;

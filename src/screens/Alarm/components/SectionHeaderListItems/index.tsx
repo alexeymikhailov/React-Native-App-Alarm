@@ -1,20 +1,19 @@
 import React from 'react';
 import {
-  Text,
-  View
-} from 'react-native';
-import styles from './styles';
+  SectionHeaderListItemsContentWrap,
+  TextSectionHeaderListItems
+} from './styles';
 
 interface SectionHeaderListItemsProps {
   section: string
 }
 
 const SectionHeaderListItems: React.FC<SectionHeaderListItemsProps>=(props) => (
-  <View style={styles.sectionHeaderListItemsContentWrap}>
-    <Text style={styles.textSectionHeaderListItems}>
+  <SectionHeaderListItemsContentWrap>
+    <TextSectionHeaderListItems>
       {props.section}
-    </Text>
-  </View>
+    </TextSectionHeaderListItems>
+  </SectionHeaderListItemsContentWrap>
 );
 
 export default SectionHeaderListItems;

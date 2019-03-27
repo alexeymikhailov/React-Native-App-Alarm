@@ -1,14 +1,13 @@
-import { StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 import StyleColors from '../../../../resources/style/colors';
 
-export default StyleSheet.create({
-  dateBoxContentWrap: {
-    flex: 1,
-    alignSelf: 'center'
-  },
-  textDateBox: {
-    color: StyleColors.BLACK,
-    fontSize: 20,
-    fontWeight: '200'
-  }
-});
+export const DateBoxContentWrap=styled.View`
+  flex: 1;
+  align-self: center;
+`;
+
+export const TextDateBox=styled.Text`
+  color: ${StyleColors.BLACK};
+  fontSize: 20;
+  fontWeight: 200;
+`;

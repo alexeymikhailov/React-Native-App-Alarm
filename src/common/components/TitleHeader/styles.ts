@@ -1,13 +1,12 @@
-import { StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 import StyleColors from '../../../resources/style/colors';
 
-export default StyleSheet.create({
-  contentTitleHeaderTextWrap: {
-    marginTop: 30
-  },
-  textTitleHeader: {
-    color: StyleColors.BLACK,
-    fontSize: 34,
-    fontWeight: 'bold'
-  }
-});
+export const ContentTitleHeaderTextWrap=styled.View`
+  margin-top: 30px;
+`;
+
+export const TextTitleHeader=styled.Text`
+  color: ${StyleColors.BLACK};
+  font-size: 34;
+  font-weight: bold;
+`;

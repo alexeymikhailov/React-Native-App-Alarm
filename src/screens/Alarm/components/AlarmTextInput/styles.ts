@@ -1,10 +1,8 @@
-import { StyleSheet } from 'react-native';
+import { css } from '@emotion/native';
 import StyleColors from '../../../../resources/style/colors';
 
-export default StyleSheet.create({
-  alarmTextInput: {
-    color: StyleColors.BLACK,
-    fontSize: 17,
-    fontWeight: '300'
-  }
-});
+export const AlarmTextInputWrap=css`
+  color: ${StyleColors.BLACK};
+  font-size: 17;
+  font-weight: 300;
+`;

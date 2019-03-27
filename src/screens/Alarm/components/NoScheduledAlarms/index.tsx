@@ -1,22 +1,22 @@
 import React from 'react';
-import {
-  Text,
-  View
-} from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import StyleColors from '../../../../resources/style/colors';
-import styles from './styles';
+import {
+  NoScheduledAlarmsContentWrap,
+  NoScheduledAlarmsIconWrap,
+  TextNoScheduledAlarms
+} from './styles';
 
 const NoScheduledAlarms: React.FC<{}>=() => (
-  <View style={styles.noScheduledAlarmsContentWrap}>
-    <View style={styles.noScheduledAlarmsIconWrap}>
+  <NoScheduledAlarmsContentWrap>
+    <NoScheduledAlarmsIconWrap>
       <Icon
         name={"md-alarm"}
         size={84}
         color={StyleColors.LIGHT_GRAY} />
-    </View>
-    <Text style={styles.textNoScheduledAlarms}>There are no scheduled alarms</Text>
-  </View>
+    </NoScheduledAlarmsIconWrap>
+    <TextNoScheduledAlarms>There are no scheduled alarms</TextNoScheduledAlarms>
+  </NoScheduledAlarmsContentWrap>
 );
 
 export default NoScheduledAlarms;

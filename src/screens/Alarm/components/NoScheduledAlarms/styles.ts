@@ -1,19 +1,19 @@
-import { StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 import StyleColors from '../../../../resources/style/colors';
 
-export default StyleSheet.create({
-  noScheduledAlarmsContentWrap: {
-    flex: .5,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  noScheduledAlarmsIconWrap: {
-    marginBottom: 15
-  },
-  textNoScheduledAlarms: {
-    color: StyleColors.BLACK,
-    textAlign: 'center',
-    fontSize: 21,
-    fontWeight: '200'
-  }
-});
+export const NoScheduledAlarmsContentWrap=styled.View`
+  flex: .5;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const NoScheduledAlarmsIconWrap=styled.View`
+  margin-bottom: 15px;
+`;
+
+export const TextNoScheduledAlarms=styled.Text`
+  color: ${StyleColors.BLACK};
+  text-align: center;
+  font-size: 21;
+  font-weight: 200;
+`;

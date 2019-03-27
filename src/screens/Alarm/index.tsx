@@ -3,18 +3,11 @@
  */
 
 import React from 'react';
-import { SafeAreaView } from 'react-navigation';
+import SafeAreaView from '../../common/components/SafeAreaView';
 import AlarmSwiperContent from './components/AlarmSwiperContent';
-import styles from './styles';
 
 const Alarm: React.FC<{}>=() => (
-  <SafeAreaView
-    style={styles.container}
-    forceInset={{
-      top: 'always',
-      bottom: 'always',
-      horizontal: 'never'
-    }}>
+  <SafeAreaView>
     <AlarmSwiperContent />
   </SafeAreaView>
 );

@@ -1,11 +1,10 @@
-import { StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 
-export default StyleSheet.create({
-  alarmSwiperContentWrap: {
-    flex: 1
-  },
-  slideItemAlarmSwiperContentWrap: {
-    flex: 1,
-    marginHorizontal: 15
-  }
-});
+export const AlarmSwiperContentWrap=styled.View`
+  flex: 1;
+`;
+
+export const SlideItemAlarmSwiperContentWrap=styled.View`
+  flex: 1;
+  margin-horizontal: 15px;
+`;

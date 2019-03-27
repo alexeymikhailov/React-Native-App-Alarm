@@ -1,8 +1,12 @@
-import React, { Component } from 'react';
+import React, {
+  Component,
+  ComponentState
+} from 'react';
 import {
   View,
   SectionList,
-  SectionListData
+  SectionListData,
+  SectionListProps
 } from 'react-native';
 import { Dispatch } from 'redux';
 import { editScheduledAlarm } from '../../../../actions';
@@ -18,19 +22,18 @@ import { getDateTimeAlarm } from '../../../../resources/strings';
 import { onHandleAlarmAlertDialogBox } from '../../../../utils/Alerts';
 import NotificationService from '../../../../utils/NotificationService';
 import {
-  existScheduledDateTimeAlarm,
   checkEditScheduledAlarmItem
 } from '../../../../utils/Validation';
 import SectionHeaderListItems from '../SectionHeaderListItems';
 import CardItemAlarm from '../CardItemAlarm';
-import styles from './styles';
+import { SeparatorAlarmStyle } from './styles';
 
 interface RefObject<T> {
   readonly current: T | null
 }
 
 interface ListAlarmItemsProps {
-  scrollContainerRef: RefObject<any>,
+  scrollContainerRef: RefObject<Component<SectionListProps<any>, ComponentState>>,
   notificationService: NotificationService,
   dateId: string,
   data: SectionListData<Item>[],
@@ -42,7 +45,7 @@ interface ListAlarmItemsProps {
 }
 
 class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
-  onHandleOpenAlarmEditModal=(alarmItem: Item, sectionListId: number) => {
+  private onHandleOpenAlarmEditModal=(alarmItem: Item, sectionListId: number) => {
     const currentOpenAlarm: CurrentOpenItem={
       alarmItem,
       sectionListId
@@ -57,7 +60,7 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
     });
   };
 
-  onChangeCardItemSwitchValueAlarm=(switchValue: boolean, item: Item, sectionListId: number) => {
+  private onChangeCardItemSwitchValueAlarm=(switchValue: boolean, item: Item, sectionListId: number) => {
     const changeSwitchCurrentAlarm={
       switchValue,
       dateId: this.props.dateId,
@@ -92,7 +95,7 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
     });
   };
 
-  onHandleSubmitEndEditing=(newText: string, item: Item, sectionListId: number) => {
+  private onHandleSubmitEndEditing=(newText: string, item: Item, sectionListId: number) => {
     if (item && (newText !== item.text)) {
       const editTextCurrentAlarm={
         dateId: this.props.dateId,
@@ -114,10 +117,8 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
     }
   };
 
-  onHandleCloseSuccessAlarmEditModal=(scheduledTime: object, alarmNewTextValue: string, currentOpenAlarm: CurrentOpenItem) => {
-    if ((existScheduledDateTimeAlarm(this.props.scheduledAlarmList, scheduledTime)
-      && checkEditScheduledAlarmItem(this.props.scheduledAlarmList, scheduledTime, currentOpenAlarm.alarmItem.id))
-      || (alarmNewTextValue === null)) {
+  private onHandleCloseSuccessAlarmEditModal=(scheduledTime: object, alarmNewTextValue: string, currentOpenAlarm: CurrentOpenItem) => {
+    if (checkEditScheduledAlarmItem(this.props.scheduledAlarmList, scheduledTime, currentOpenAlarm.alarmItem.id)) {
       onHandleAlarmAlertDialogBox('Error', ERROR_SCHEDULED_TIME_ALARM);
       return false;
     } else {
@@ -143,7 +144,7 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
     }
   };
 
-  render() {
+  public render() {
     const {
       scrollContainerRef,
       data,
@@ -161,7 +162,7 @@ class ListAlarmItems extends Component<ListAlarmItemsProps, {}> {
           }}
           sections={data}
           ItemSeparatorComponent={() => (
-            <View style={styles.separatorAlarmStyle} />
+            <SeparatorAlarmStyle />
           )}
           showsVerticalScrollIndicator={false}
           renderSectionHeader={({ section }) => (

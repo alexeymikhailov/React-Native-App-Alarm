@@ -5,7 +5,7 @@ import {
 } from 'react-native';
 import { TextInputField } from '../../../../models';
 import StyleColors from '../../../../resources/style/colors';
-import styles from './styles';
+import { AlarmTextInputWrap } from './styles';
 
 interface AlarmTextInputProps {
   textValue: string,
@@ -25,13 +25,13 @@ class AlarmTextInput extends Component<AlarmTextInputProps, AlarmTextInputState>
 
   constructor(props: AlarmTextInputProps) {
     super(props);
-    
+
     this.state={
       alarmTextValue: this.props.textValue
     };
   }
 
-  onHandleSetAlarmTextInputRef=(ref: TextInputField) => {
+  private onHandleSetAlarmTextInputRef=(ref: TextInputField) => {
     this.alarmTextInputRef=ref;
 
     if (this.props.onHandleSetAlarmTextInputRef) {
@@ -39,29 +39,29 @@ class AlarmTextInput extends Component<AlarmTextInputProps, AlarmTextInputState>
     }
   };
 
-  onChangeAlarmTextInput=(alarmTextValue: string) => {
+  private onChangeAlarmTextInput=(alarmTextValue: string) => {
     this.setState({
       alarmTextValue
     });
   };
 
-  onEndEditingAlarmTextInput=() => {
+  private onEndEditingAlarmTextInput=() => {
     this.props.onHandleSubmitEndEditing(this.state.alarmTextValue);
   };
 
-  onFocusAlarmTextInput=() => {
+  private onFocusAlarmTextInput=() => {
     if (this.props.onHandleSetAlarmTextInputRef) {
       this.props.onHandleSetAlarmTextInputRef(this.alarmTextInputRef);
     }
   };
 
-  componentDidMount(): void {
+  public componentDidMount(): void {
     if (this.props.onHandleSetDefaultAlarmTextInput) {
       this.props.onHandleSetDefaultAlarmTextInput(this.state.alarmTextValue);
     }
   }
 
-  componentDidUpdate(prevProps: AlarmTextInputProps): void {
+  public omponentDidUpdate(prevProps: AlarmTextInputProps): void {
     if (prevProps.textValue !== this.props.textValue) {
       this.setState({
         alarmTextValue: this.props.textValue
@@ -69,7 +69,7 @@ class AlarmTextInput extends Component<AlarmTextInputProps, AlarmTextInputState>
     }
   }
 
-  render() {
+  public render() {
     const {
       editableText=true,
       style
@@ -91,7 +91,7 @@ class AlarmTextInput extends Component<AlarmTextInputProps, AlarmTextInputState>
         placeholder="Name"
         placeholderTextColor={StyleColors.DARK_GRAY}
         returnKeyType="done"
-        style={[styles.alarmTextInput, style]} />
+        style={[AlarmTextInputWrap, style]} />
     );
   }
 }

@@ -4,6 +4,7 @@
 
 * React
 * TypeScript
+* Emotion
 * React Native
 * Redux
 * React Navigation

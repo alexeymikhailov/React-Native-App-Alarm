@@ -1,7 +1,5 @@
-import { StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 
-export default StyleSheet.create({
-  separatorAlarmStyle: {
-    marginVertical: 8
-  }
-});
+export const SeparatorAlarmStyle=styled.View`
+  margin-vertical: 8px;
+`;

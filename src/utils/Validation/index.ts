@@ -9,7 +9,7 @@ import {
 
 export const checkScheduleCurrentTimeAlarm=(scheduledDateTime: object) => {
   return getCurrentDate() === getDateAlarm(scheduledDateTime)
-    && getCurrentTime() === getTimeAlarm(scheduledDateTime);
+    && (getCurrentTime() === getTimeAlarm(scheduledDateTime) || getCurrentTime() > getTimeAlarm(scheduledDateTime));
 };
 
 export const existScheduledDateTimeAlarm=(scheduledAlarmList: AlarmItem[], scheduledDateTime: object) => {
@@ -37,7 +37,7 @@ export const checkEditScheduledAlarmItem=(scheduledAlarmList: AlarmItem[], sched
       return item.data.some((dataItem) => {
         if (dataItem.hourDifferentiation === getHourDifferentiationAlarm(getTimeAlarm(scheduledDateTime))) {
           return dataItem.data.some((innerDataItem) => {
-            if (innerDataItem.id === alarmId) {
+            if (innerDataItem.time === getTimeAlarm(scheduledDateTime) && innerDataItem.id !== alarmId) {
               return true;
             }
             return false;

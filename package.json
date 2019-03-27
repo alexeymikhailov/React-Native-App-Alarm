@@ -8,6 +8,8 @@
     "check:types": "tsc"
   },
   "dependencies": {
+    "@emotion/core": "^10.0.10",
+    "@emotion/native": "^10.0.10",
     "moment": "^2.24.0",
     "react": "16.6.3",
     "react-native": "0.58.6",

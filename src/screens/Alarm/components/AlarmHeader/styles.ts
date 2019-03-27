@@ -1,11 +1,10 @@
-import { StyleSheet } from 'react-native';
+import styled from '@emotion/native';
 
-export default StyleSheet.create({
-  alarmHeaderContentWrap: {
-    marginTop: 10
-  },
-  headerControlAreaWrap: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  }
-});
+export const AlarmHeaderContentWrap=styled.View`
+  margin-top: 10px;
+`;
+
+export const HeaderControlAreaWrap=styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+`;

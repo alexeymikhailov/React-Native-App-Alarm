@@ -16,7 +16,7 @@ class NotificationService {
     });
   }
 
-  onHandleLocalNotificationSchedule=(data: PushNotificationScheduleObject) => {
+  public onHandleLocalNotificationSchedule=(data: PushNotificationScheduleObject) => {
     PushNotification.localNotificationSchedule({
       ...data,
       userInfo: {
@@ -27,7 +27,7 @@ class NotificationService {
     });
   };
 
-  onHandleEditLocalNotificationSchedule=(data: PushNotificationScheduleObject) => {
+  public onHandleEditLocalNotificationSchedule=(data: PushNotificationScheduleObject) => {
     PushNotification.cancelLocalNotifications({
       id: data.id
     });
@@ -42,7 +42,7 @@ class NotificationService {
     });
   };
 
-  onHandleCancelLocalNotificationSchedule=(data: PushNotificationScheduleObject) => {
+  public onHandleCancelLocalNotificationSchedule=(data: PushNotificationScheduleObject) => {
     PushNotification.cancelLocalNotifications({
       id: data.id
     });

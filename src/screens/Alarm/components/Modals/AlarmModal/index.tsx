@@ -1,18 +1,22 @@
 import React from 'react';
-import {
-  Text,
-  View,
-  Modal
-} from 'react-native';
-import { SafeAreaView } from 'react-navigation';
+import { Modal } from 'react-native';
 import DatePicker from 'react-native-date-picker';
 import {
   getCurrentDateTime
 } from '../../../../../resources/strings';
+import SafeAreaView from '../../../../../common/components/SafeAreaView';
 import TouchButton from '../../../../../common/components/TouchButton';
 import TitleHeader from '../../../../../common/components/TitleHeader';
 import AlarmTextInput from '../../AlarmTextInput';
-import styles from './styles';
+import {
+  AlarmModalWrap,
+  AlarmModalHeaderContentWrap,
+  TextAlarmModalHeaderContentCancel,
+  TextAlarmModalHeaderContentCloseSuccess,
+  AlarmModalDateTimePickerWrap,
+  AlarmModalTextInputWrap,
+  AlarmModalTextInput
+} from './styles';
 
 interface AlarmModalProps {
   title: string,
@@ -48,42 +52,36 @@ const AlarmModal: React.FC<AlarmModalProps>=(props) => {
       animationType={"slide"}
       visible={visible}
       transparent={true}>
-      <SafeAreaView
-        style={styles.alarmModalContainer}
-        forceInset={{
-          top: 'always',
-          bottom: 'always',
-          horizontal: 'never'
-        }}>
-        <View style={styles.alarmModalWrap}>
-          <View style={styles.alarmModalHeaderContentWrap}>
+      <SafeAreaView>
+        <AlarmModalWrap>
+          <AlarmModalHeaderContentWrap>
             <TouchButton
               onPress={onPressCancelAlarmModal}>
-              <Text style={styles.textAlarmModalHeaderContentCancel}>Cancel</Text>
+              <TextAlarmModalHeaderContentCancel>Cancel</TextAlarmModalHeaderContentCancel>
             </TouchButton>
             <TouchButton
               onPress={onPressCloseSuccessAlarmModal}>
-              <Text style={styles.textAlarmModalHeaderContentCloseSuccess}>Done</Text>
+              <TextAlarmModalHeaderContentCloseSuccess>Done</TextAlarmModalHeaderContentCloseSuccess>
             </TouchButton>
-          </View>
+          </AlarmModalHeaderContentWrap>
           <TitleHeader
             title={title} />
-          <View style={styles.alarmModalDateTimePickerWrap}>
+          <AlarmModalDateTimePickerWrap>
             <DatePicker
               date={getCurrentDateTime()}
               minimumDate={minimumDatePicker}
               mode={modeDatePicker}
               onDateChange={onChangeDatePicker} />
-          </View>
-          <View style={styles.alarmModalTextInputWrap}>
+          </AlarmModalDateTimePickerWrap>
+          <AlarmModalTextInputWrap>
             <AlarmTextInput
               textValue={textValue !== 'null' ? textValue : ''}
               onHandleSetDefaultAlarmTextInput={onHandleSetDefaultAlarmTextInput}
               onHandleSubmitEndEditing={onHandleSubmitEndEditing}
-              style={styles.alarmModalTextInput} />
-          </View>
+              style={AlarmModalTextInput} />
+          </AlarmModalTextInputWrap>
           { children && children() }
-        </View>
+        </AlarmModalWrap>
       </SafeAreaView>
     </Modal>
   );

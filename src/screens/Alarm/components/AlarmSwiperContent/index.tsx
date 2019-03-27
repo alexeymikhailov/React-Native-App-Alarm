@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import {
-  View,
+  Platform,
+  UIManager,
+  LayoutAnimation,
   Keyboard,
   KeyboardEvent,
   EmitterSubscription,
@@ -9,9 +11,8 @@ import {
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
-import {
-  deleteTriggeredAlarms
-} from '../../../../actions';
+import { deleteTriggeredAlarms } from '../../../../actions';
+import { ERROR_SCHEDULE_CURRENT_TIME_ALARM } from '../../../../constants';
 import {
   CurrentOpenItem,
   ModalData,
@@ -21,11 +22,16 @@ import {
 } from '../../../../models';
 import { getCurrentDateTime } from '../../../../resources/strings';
 import AlarmModal from '../Modals/AlarmModal';
+import { onHandleAlarmAlertDialogBox } from '../../../../utils/Alerts';
 import NotificationService from '../../../../utils/NotificationService';
+import { checkScheduleCurrentTimeAlarm } from '../../../../utils/Validation';
 import NoScheduledAlarms from '../NoScheduledAlarms';
 import AlarmHeader from '../AlarmHeader';
 import ListAlarmItems from '../ListAlarmItems';
-import styles from './styles';
+import {
+  AlarmSwiperContentWrap,
+  SlideItemAlarmSwiperContentWrap
+} from './styles';
 
 interface AlarmSwiperContentProps {
   scheduledAlarmList: AlarmItem[],
@@ -57,6 +63,11 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
   constructor(props: AlarmSwiperContentProps) {
     super(props);
 
+    if (Platform.OS === 'android') {
+      UIManager.setLayoutAnimationEnabledExperimental &&
+        UIManager.setLayoutAnimationEnabledExperimental(true);
+    }
+
     this.state={
       showAlarmModal: false,
       title: '',
@@ -69,23 +80,25 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
     this.keyboardHideListener=Keyboard.addListener('keyboardWillHide', this.onHandleKeyboardHide);
   }
 
-  onHandleOpenedReceivedNotification=(notification: OpenedReceivedNotification) => {
+  private onHandleOpenedReceivedNotification=(notification: OpenedReceivedNotification) => {
     if (notification.foreground) {
       this.props.dispatch(deleteTriggeredAlarms());
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
   };
 
-  onHandleAppStateChange=(appState: string) => {
+  private onHandleAppStateChange=(appState: string) => {
     if (appState === 'active') {
       this.props.dispatch(deleteTriggeredAlarms());
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
   };
 
-  onHandleSetAlarmTextInputRef=(ref: TextInputField) => {
+  private onHandleSetAlarmTextInputRef=(ref: TextInputField) => {
     this.alarmTextInputRef=ref;
   };
 
-  onHandleKeyboardShow=(e: KeyboardEvent) => {
+  private onHandleKeyboardShow=(e: KeyboardEvent) => {
     if (this.alarmTextInputRef && this.scrollContainerRef) {
       this.alarmTextInputRef.measure((x: number, y: number, width: number, height: number, pageX: number, pageY: number): void => {
         const measureTextInput={
@@ -106,7 +119,7 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
     }
   };
 
-  onHandleKeyboardHide=() => {
+  private onHandleKeyboardHide=() => {
     if (this.alarmTextInputRef && this.scrollContainerRef) {
       Keyboard.dismiss();
 
@@ -118,7 +131,7 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
     }
   };
 
-  onHandleOpenAlarmModal=(modalData: ModalData) => {
+  private onHandleOpenAlarmModal=(modalData: ModalData) => {
     if (modalData.currentOpenAlarm) {
       this.currentOpenAlarm=modalData.currentOpenAlarm;
     }
@@ -129,49 +142,58 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
     }));
   };
 
-  onHandleCancelAlarmModal=() => {
+  private onHandleCancelAlarmModal=() => {
     this.setState((prevState) => ({
       showAlarmModal: !prevState.showAlarmModal
     }));
   };
 
-  onChangeDatePicker=(datetime: object) => {
+  private onChangeDatePicker=(datetime: object) => {
     this.scheduledDateTime=datetime;
   };
 
-  onHandleSetDefaultAlarmTextInputModal=(text: string) => {
+  private onHandleSetDefaultAlarmTextInputModal=(text: string) => {
     this.alarmTextValue=text;
   };
 
-  onHandleSubmitEndEditingTextInputModal=(text: string) => {
+  private onHandleSubmitEndEditingTextInputModal=(text: string) => {
     this.alarmTextValue=text;
   };
 
-  onHandleCloseSuccessAlarmModal=() => {
-    const executionResultCloseAlarmModal=this.state.onHandleCloseSuccessAlarmModal && this.state.onHandleCloseSuccessAlarmModal(this.scheduledDateTime, this.alarmTextValue, this.currentOpenAlarm);
+  private onHandleCloseSuccessAlarmModal=() => {
+    let executionResultCloseAlarmModal: boolean | undefined;
+
+    if (checkScheduleCurrentTimeAlarm(this.scheduledDateTime)) {
+      onHandleAlarmAlertDialogBox('Error', ERROR_SCHEDULE_CURRENT_TIME_ALARM);
+      return;
+    }
+
+    executionResultCloseAlarmModal=this.state.onHandleCloseSuccessAlarmModal && this.state.onHandleCloseSuccessAlarmModal(this.scheduledDateTime, this.alarmTextValue, this.currentOpenAlarm);
 
     if (executionResultCloseAlarmModal) {
       this.setState((prevState) => ({
         showAlarmModal: !prevState.showAlarmModal
       }));
+
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     }
   };
 
-  componentDidMount(): void {
+  public componentDidMount(): void {
     AppState.addEventListener('change', this.onHandleAppStateChange);
   }
 
-  componentWillUnmount(): void {
+  public componentWillUnmount(): void {
     AppState.removeEventListener('change', this.onHandleAppStateChange);
     this.keyboardShowListener.remove();
     this.keyboardHideListener.remove();
   }
 
-  render() {
+  public render() {
     const { scheduledAlarmList }=this.props;
 
     return (
-      <View style={styles.alarmSwiperContentWrap}>
+      <AlarmSwiperContentWrap>
         <AlarmModal
           title={this.state.title}
           minimumDatePicker={this.state.minimumDatePicker}
@@ -190,8 +212,7 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
           showsPagination={false}>
           {
             scheduledAlarmList.length > 0 ? scheduledAlarmList.map((alarmItem): React.ReactNode => (
-              <View
-                style={styles.slideItemAlarmSwiperContentWrap}
+              <SlideItemAlarmSwiperContentWrap
                 key={alarmItem.dateId}>
                 <AlarmHeader
                   notificationService={this.notificationService}
@@ -206,19 +227,19 @@ class AlarmSwiperContent extends Component<AlarmSwiperContentProps, AlarmSwiperC
                   onHandleSetAlarmTextInputRef={this.onHandleSetAlarmTextInputRef}
                   onHandleOpenAlarmEditModal={this.onHandleOpenAlarmModal}
                   {...this.props} />
-              </View>
+              </SlideItemAlarmSwiperContentWrap>
             )) : (
-              <View style={styles.slideItemAlarmSwiperContentWrap}>
+              <SlideItemAlarmSwiperContentWrap>
                 <AlarmHeader
                   notificationService={this.notificationService}
                   onHandleOpenAlarmAddModal={this.onHandleOpenAlarmModal}
                   {...this.props} />
                 <NoScheduledAlarms />
-              </View>
+              </SlideItemAlarmSwiperContentWrap>
             )
           }
         </Swiper>
-      </View>
+      </AlarmSwiperContentWrap>
     );
   }
 }
